@@ -32,9 +32,10 @@ class _GlobalCardState extends State<GlobalCard> {
       child: Stack(
         clipBehavior: Clip.none, // Ensures that the animated container doesn't get clipped
         children: [
-          // Card widget
+          // Card widget with a fixed height
           SizedBox(
             width: screenWidth < 350 ? screenWidth - 20 : 350,
+            height: 400, // Set a fixed height for the card here
             child: Card(
               elevation: 4.0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
