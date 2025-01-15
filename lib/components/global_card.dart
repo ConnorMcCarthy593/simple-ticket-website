@@ -42,7 +42,7 @@ class _DetailedCardState extends State<DetailedCard> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: SizedBox(
-        width: screenWidth < 350 ? screenWidth - 20 : 350, // Set a width constraint for the Stack
+        width: screenWidth < 350 ? screenWidth - 50 : 350, // Set a width constraint for the Stack
         height: 400, // Set a height constraint for the Stack
         child: Stack(
           clipBehavior: Clip.none,

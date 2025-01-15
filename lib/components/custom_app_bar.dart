@@ -15,7 +15,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(0xFF35495F),
+      // backgroundColor: Color(0xFF35495F),
+            backgroundColor: Theme.of(context).primaryColor,
+
       title: AnimatedSwitcher(
         duration: Duration(milliseconds: 500), // Set animation duration
         transitionBuilder: (Widget child, Animation<double> animation) {

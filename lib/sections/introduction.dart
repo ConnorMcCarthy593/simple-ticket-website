@@ -8,7 +8,6 @@ class IntroductionSection extends StatefulWidget {
 }
 
 class _IntroductionSectionState extends State<IntroductionSection> with TickerProviderStateMixin {
-  static const Color customBlue = Color(0xFF354960);
   static const String textToAnimate =
       "Streamline operations across your enterprise with SimpleTicket: The AI-powered platform for service management, automation, and insights.";
 
@@ -73,7 +72,7 @@ class _IntroductionSectionState extends State<IntroductionSection> with TickerPr
                     Text(
                       "LEVERAGE AI POWER",
                       style: TextStyle(
-                        color: customBlue,
+                        color: Theme.of(context).primaryColor,
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                       ),

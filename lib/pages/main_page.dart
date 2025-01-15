@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:simple_ticket/components/section_title.dart';
 import '../components/custom_app_bar.dart';
 import '../components/global_card.dart';
 import '../sections/features_section.dart';
 import '../sections/introduction.dart';
 import '../sections/modules.dart';
+
+
+
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
@@ -35,8 +39,11 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the theme color from the context
+    // Color themeColor = Theme.of(context).primaryColor;
+
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 144, 162, 182),
+      // backgroundColor: themeColor, // Use theme's primary color
       appBar: CustomAppBar(showImage: showImage),
       body: SingleChildScrollView(
         controller: _controller,
@@ -47,6 +54,7 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               IntroductionSection(key: _introductionKey),
               SizedBox(height: 10),
+              SectionTitle(text: "Modules"),
               ModulesSection(key: _modulesKey),
               SizedBox(height: 10),
               FeaturesSection(key: _featuresKey),
