@@ -16,7 +16,7 @@ class ModulesSection extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          GlobalCard(
+          DetailedCard(
             title: 'Marketing',
             description: 'Enhance your marketing efforts with targeted campaigns, detailed analytics, and automated marketing tools. Optimize your strategies to reach more customers effectively.',
             animationPath: 'https://lottie.host/bddd9424-7625-4528-bac0-4cb741f1be05/FIsyTVgp2o.json',
@@ -27,7 +27,7 @@ class ModulesSection extends StatelessWidget {
             ],
           ),
           const SizedBox(width: 16),
-          GlobalCard(
+          DetailedCard(
             title: 'Recruiting',
             description: 'Streamline your recruitment process. Post job openings, review applications, track candidates, and collaborate with your hiring team to find the perfect match for your organization.',
             animationPath: 'https://lottie.host/06922141-ea60-45da-9862-b085209f056c/RwBLNL0DZp.json',
@@ -38,7 +38,7 @@ class ModulesSection extends StatelessWidget {
             ],
           ),
           const SizedBox(width: 16),
-          GlobalCard(
+          DetailedCard(
             title: 'Customer Management',
             description: 'Build stronger relationships with your customers. Track interactions, manage customer data, and personalize services to improve satisfaction and retention.',
             animationPath: 'https://lottie.host/4ed7ce26-7491-4516-8c9d-ee5e0258f720/l7UQzhbH1t.json',
@@ -49,7 +49,7 @@ class ModulesSection extends StatelessWidget {
             ],
           ),
           const SizedBox(width: 16),
-          GlobalCard(
+          DetailedCard(
             title: 'Sales Management',
             description: 'Efficiently manage your sales process. From tracking leads to closing deals, streamline your sales workflow to boost performance and conversion rates.',
             animationPath: 'https://lottie.host/712ca8ea-8b00-4615-825f-ab76a3a15042/Cb4dHj5nHH.json',
@@ -59,7 +59,7 @@ class ModulesSection extends StatelessWidget {
               {'icon': Icons.speed, 'description': 'Streamline workflow'},
             ],
           ),
-          GlobalCard(
+          DetailedCard(
             title: 'Financial Documentation',
             description: 'Organize and manage all financial records in one place. Simplify accounting, track expenses, generate invoices, and ensure compliance with ease.',
             animationPath: 'https://lottie.host/ca635384-4d5e-4fa1-8036-62aa4316be9f/FjoUUvbQUR.json',

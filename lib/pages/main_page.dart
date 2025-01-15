@@ -17,41 +17,11 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 144, 162, 182),
       appBar: AppBar(
+        backgroundColor: Color(0xFF35495F),
         title: const Text('Simple Ticket'),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              switch (value) {
-                case 'Introduction':
-                  _scrollToSection(_introductionKey);
-                  break;
-                case 'Modules':
-                  _scrollToSection(_modulesKey);
-                  break;
-                case 'Features':
-                  _scrollToSection(_featuresKey);
-                  break;
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem<String>(
-                  value: 'Introduction',
-                  child: Text('Introduction'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'Modules',
-                  child: Text('Modules'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'Features',
-                  child: Text('Features'),
-                ),
-              ];
-            },
-          ),
-        ],
+        actions: [],
       ),
       body: SingleChildScrollView(
         controller: _controller,
@@ -60,68 +30,22 @@ class MainScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: () => _scrollToSection(_introductionKey),
-                child: const Text(
-                  'Introduction',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
               IntroductionSection(key: _introductionKey),
-              const SizedBox(height: 32),
-
-              GestureDetector(
-                onTap: () => _scrollToSection(_modulesKey),
-                child: const Text(
-                  'Modules',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
+              SizedBox(
+                height: 10,
               ),
-              const SizedBox(height: 16),
               ModulesSection(key: _modulesKey),
-              const SizedBox(height: 32),
-
-              GestureDetector(
-                onTap: () => _scrollToSection(_featuresKey),
-                child: const Text(
-                  'Features',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
+              SizedBox(
+                height: 10,
               ),
-              const SizedBox(height: 16),
               FeaturesSection(key: _featuresKey),
+              SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  void _scrollToSection(GlobalKey key) {
-    final context = key.currentContext;
-    if (context != null) {
-      final box = context.findRenderObject() as RenderBox?;
-      if (box != null) {
-        final offset = box.localToGlobal(Offset.zero).dy;
-        _controller.animateTo(
-          offset,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      }
-    }
   }
 }

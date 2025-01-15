@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 
 class IntroductionSection extends StatelessWidget {
   const IntroductionSection({super.key});
-  // Define the custom color
   static const Color customBlue = Color(0xFF354960);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start, // Align both columns at the top
+      crossAxisAlignment: CrossAxisAlignment.start, 
       children: [
         const Expanded(
           child: Align(
-            alignment: Alignment.topRight, // Align the column to the top-right
+            alignment: Alignment.topRight, 
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // Align texts to the start of the column
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min, // Prevent extra space being added above
+              mainAxisSize: MainAxisSize.min, 
               children: [
                 Text(
                   "LEVERAGE AI POWER",
@@ -38,12 +37,12 @@ class IntroductionSection extends StatelessWidget {
         ),
         const Expanded(
           child: Align(
-            alignment: Alignment.topLeft, // Align text to the top-left
+            alignment: Alignment.topLeft, 
             child: Text(
-              "Integrate AI, Data, and Workflows seamlessly into your business with SimpleTicket, the AI-driven platform for digital transformation.",
+              "Streamline operations across your enterprise with SimpleTicket: The AI-powered platform for service management, automation, and insights.",
               style: TextStyle(
-                color: Colors.black, // Black color
-                fontSize: 20, // Larger font size
+                color: Colors.black, 
+                fontSize: 30, 
               ),
             ),
           ),
