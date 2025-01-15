@@ -87,13 +87,18 @@ class _DetailedCardState extends State<DetailedCard> {
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          widget.description,
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.grey,
+                        // Wrap the description in a Container with a fixed height
+                        Container(
+                          height: 100, // Fixed height for the description area
+                          child: Text(
+                            widget.description,
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                            // overflow: TextOverflow.ellipsis, // Handle overflow
                           ),
-                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
