@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/custom_app_bar.dart';
 import '../components/global_card.dart';
 import '../sections/features_section.dart';
 import '../sections/introduction.dart';
@@ -36,33 +37,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 144, 162, 182),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF35495F),
-        title: AnimatedSwitcher(
-          duration: Duration(milliseconds: 500), // Set animation duration
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-          child: showImage
-              ? Image.network(
-                  'https://iili.io/26emATx.png',
-                  height: 80, // Adjust height as needed
-                  key: ValueKey<int>(1), // Ensure the widget is treated as a new widget
-                )
-              : Text(
-                  'Welcome to',
-                  style: TextStyle(
-                    color: Colors.white, // Set text color to white
-                    fontSize: 20, // Adjust font size as needed
-                  ),
-                  key: ValueKey<int>(0), // Ensure the widget is treated as a new widget
-                ),
-        ),
-        actions: [],
-      ),
+      appBar: CustomAppBar(showImage: showImage),
       body: SingleChildScrollView(
         controller: _controller,
         child: Padding(
