@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../components/global_cart.dart';
+import '../components/global_card.dart';
 
 class ModulesSection extends StatelessWidget {
     const ModulesSection({super.key});

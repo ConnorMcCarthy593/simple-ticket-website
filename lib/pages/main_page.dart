@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../components/global_cart.dart';
+import '../components/global_card.dart';
 import '../sections/features_section.dart';
 import '../sections/introduction.dart';
 import '../sections/modules.dart';

@@ -1,7 +1,7 @@
 // Section 3: Automation
 import 'package:flutter/material.dart';
 
-import '../components/global_cart.dart';
+import '../components/global_card.dart';
 
 class FeaturesSection extends StatelessWidget {
   const FeaturesSection({super.key});
@@ -33,16 +33,16 @@ class FeaturesSection extends StatelessWidget {
               {'icon': Icons.task, 'description': 'Task reminders'},
             ],
           ),
-GlobalCard(
-  title: 'AI Agents',
-  description: 'Deploy autonomous agents to handle data processing, customer support, and routine operations.',
-  animationPath: 'https://lottie.host/aee38d53-ce70-492c-a745-5b526199ebd0/hXQO8892mP.json',
-  details: [
-    {'icon': Icons.notifications_active, 'description': 'Monitor critical metrics with instant alerts'},
-    {'icon': Icons.event, 'description': 'Trigger automated workflows based on system events'},
-    {'icon': Icons.assistant, 'description': 'Scale operations with intelligent task handling'},
-  ],
-),
+          GlobalCard(
+            title: 'AI Agents',
+            description: 'Deploy autonomous agents to handle data processing, customer support, and routine operations.',
+            animationPath: 'https://lottie.host/aee38d53-ce70-492c-a745-5b526199ebd0/hXQO8892mP.json',
+            details: [
+              {'icon': Icons.notifications_active, 'description': 'Monitor critical metrics with instant alerts'},
+              {'icon': Icons.event, 'description': 'Trigger automated workflows based on system events'},
+              {'icon': Icons.assistant, 'description': 'Scale operations with intelligent task handling'},
+            ],
+          ),
           GlobalCard(
             title: 'Access Control',
             description: 'Manage user access with advanced controls. Ensure secure, role-based access to sensitive data and GlobalCards, empowering only authorized users with specific privileges.',
@@ -58,3 +58,9 @@ GlobalCard(
     );
   }
 }
+
+                            // pipeline patch updates
+              // simplified cost structure
+
+              // and much more! 
+              // tax ready
