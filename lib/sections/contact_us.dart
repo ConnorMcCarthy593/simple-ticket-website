@@ -12,6 +12,7 @@ class ContactSection extends StatefulWidget {
 class _ContactSectionState extends State<ContactSection> {
   bool isHovered = false;
   final String emailAddress = 'jcasas@simple-ticket.net';
+  final String calendlyUrl = 'https://calendly.com/jcasasmail';
 
   // Function to launch the email app
   void _sendEmail() async {
@@ -39,6 +40,16 @@ class _ContactSectionState extends State<ContactSection> {
     });
   }
 
+  // Function to open Calendly link
+  void _openCalendly() async {
+    final Uri calendlyUri = Uri.parse(calendlyUrl);
+    if (await canLaunchUrl(calendlyUri)) {
+      await launchUrl(calendlyUri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $calendlyUrl';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -56,7 +67,7 @@ class _ContactSectionState extends State<ContactSection> {
               Card(
                 elevation: 8,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -70,6 +81,12 @@ class _ContactSectionState extends State<ContactSection> {
                         onPressed: _sendEmail,
                         icon: const Icon(Icons.email),
                         label: const Text('Send email through outlook'),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton.icon(
+                        onPressed: _openCalendly,
+                        icon: const Icon(Icons.calendar_today),
+                        label: const Text('Schedule a meeting'),
                       ),
                     ],
                   ),

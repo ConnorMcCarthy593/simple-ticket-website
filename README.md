@@ -1,6 +1,6 @@
 # simple_ticket
 
-A new Flutter project.
+The simple cost efficient CRM
 
 ## Getting Started
 

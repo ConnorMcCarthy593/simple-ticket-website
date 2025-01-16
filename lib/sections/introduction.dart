@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../main.dart';
-
+const double MOBILE_SCREEN_WIDTH = 600; // Define mobile breakpoint
 
 class IntroductionSection extends StatefulWidget {
   const IntroductionSection({super.key});
@@ -21,6 +20,7 @@ class _IntroductionSectionState extends State<IntroductionSection> with TickerPr
     super.initState();
     _displayedText = "";
 
+    // Set up the animation controller for letter-by-letter display
     _textController = AnimationController(
       duration: Duration(milliseconds: textToAnimate.length * 10), // Adjust speed
       vsync: this,
@@ -43,162 +43,96 @@ class _IntroductionSectionState extends State<IntroductionSection> with TickerPr
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < MOBILE_SCREEN_WIDTH;
+  Widget _buildAnimatedContent(bool isMobile) {
+    final titleContent = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          "SIMPLIFY OPERATIONS",
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: isMobile ? 35 : 50, // Smaller font size for mobile
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          "LEVERAGE AI",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: isMobile ? 30 : 40, // Smaller font size for mobile
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
 
-    if (!isMobile) {
-      return Row(
+    final descriptionContent = Text(
+      _displayedText,
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: isMobile ? 24 : 30, // Smaller font size for mobile
+        fontWeight: FontWeight.w400,
+        letterSpacing: 1.2,
+      ),
+    );
+
+    final slideTransition = (Widget child) => SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(0, 0.5),
+        end: Offset.zero,
+      ).animate(CurvedAnimation(
+        parent: _textController,
+        curve: Curves.easeOut,
+      )),
+      child: FadeTransition(
+        opacity: CurvedAnimation(
+          parent: _textController,
+          curve: Curves.easeIn,
+        ),
+        child: child,
+      ),
+    );
+
+    if (isMobile) {
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Align(
-              alignment: Alignment.topRight,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.5),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(
-                  parent: _textController,
-                  curve: Curves.easeOut,
-                )),
-                child: FadeTransition(
-                  opacity: CurvedAnimation(
-                    parent: _textController,
-                    curve: Curves.easeIn,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "SIMPLIFY OPERATIONS",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "LEVERAGE AI",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: 30),
-          Expanded(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.5),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(
-                  parent: _textController,
-                  curve: Curves.easeOut,
-                )),
-                child: FadeTransition(
-                  opacity: CurvedAnimation(
-                    parent: _textController,
-                    curve: Curves.easeIn,
-                  ),
-                  child: Text(
-                    _displayedText,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          slideTransition(titleContent),
+          const SizedBox(height: 20),
+          slideTransition(descriptionContent),
         ],
       );
     }
 
-    // Mobile layout
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.5),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: _textController,
-              curve: Curves.easeOut,
-            )),
-            child: FadeTransition(
-              opacity: CurvedAnimation(
-                parent: _textController,
-                curve: Curves.easeIn,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "SIMPLIFY OPERATIONS",
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    "LEVERAGE AI",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Align(
+            alignment: Alignment.topRight,
+            child: slideTransition(titleContent),
           ),
-          SizedBox(height: 30),
-          SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.5),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: _textController,
-              curve: Curves.easeOut,
-            )),
-            child: FadeTransition(
-              opacity: CurvedAnimation(
-                parent: _textController,
-                curve: Curves.easeIn,
-              ),
-              child: Text(
-                _displayedText,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 1.2,
-                ),
-              ),
-            ),
+        ),
+        const SizedBox(width: 30),
+        Expanded(
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: slideTransition(descriptionContent),
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < MOBILE_SCREEN_WIDTH;
+        return _buildAnimatedContent(isMobile);
+      },
     );
   }
 }

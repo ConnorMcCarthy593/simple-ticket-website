@@ -60,7 +60,9 @@ class _MainScreenState extends State<MainScreen> {
               SectionTitle(text: "Features"),
               FeaturesSection(key: _featuresKey),
               SizedBox(height:100),
-              ContactSection(key: _contactUsKey)
+              ContactSection(key: _contactUsKey),
+              SizedBox(height: 50,),
+              
             ],
           ),
         ),
