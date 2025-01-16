@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../main.dart';
+
 class DetailedCard extends StatefulWidget {
   final String title;
   final String description;
@@ -42,7 +44,7 @@ class _DetailedCardState extends State<DetailedCard> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: SizedBox(
-        width: screenWidth < 350 ? screenWidth - 50 : 350, // Set a width constraint for the Stack
+        width: screenWidth < MOBILE_SCREEN_WIDTH ? screenWidth - 50 : MOBILE_SCREEN_WIDTH, // Set a width constraint for the Stack
         height: 400, // Set a height constraint for the Stack
         child: Stack(
           clipBehavior: Clip.none,
@@ -129,7 +131,7 @@ class _DetailedCardState extends State<DetailedCard> {
                     itemBuilder: (context, index) {
                       final detail = widget.details[index];
                       return ListTile(
-                        leading: Icon(detail['icon'], color: Colors.blue),
+                        leading: Icon(detail['icon'], color: Theme.of(context).colorScheme.primary),
                         title: Text(
                           detail['description'],
                           style: const TextStyle(fontSize: 14.0),

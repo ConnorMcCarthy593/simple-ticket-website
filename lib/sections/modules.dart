@@ -16,7 +16,7 @@ class ModulesSection extends StatelessWidget {
         description: 'Enhance your marketing efforts with targeted campaigns, detailed analytics, and automated marketing tools. Optimize your strategies to reach more customers effectively.',
         animationPath: 'https://lottie.host/bddd9424-7625-4528-bac0-4cb741f1be05/FIsyTVgp2o.json',
         details: [
-          {'icon': Icons.campaign, 'description': 'Targeted campaigns'},
+          {'icon': Icons.campaign, 'description': 'Targeted campaigns', },
           {'icon': Icons.analytics, 'description': 'Detailed analytics'},
           {'icon': Icons.email, 'description': 'Automatic notifications'},
         ],
