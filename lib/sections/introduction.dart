@@ -8,8 +8,7 @@ class IntroductionSection extends StatefulWidget {
 }
 
 class _IntroductionSectionState extends State<IntroductionSection> with TickerProviderStateMixin {
-  static const String textToAnimate =
-      "Streamline operations across your enterprise with SimpleTicket: The AI-powered platform for service management, automation, and insights.";
+  static const String textToAnimate = "Streamline operations across your enterprise with SimpleTicket: The AI-powered platform for service management, automation, and insights.";
 
   late AnimationController _textController;
   late String _displayedText;
@@ -27,8 +26,7 @@ class _IntroductionSectionState extends State<IntroductionSection> with TickerPr
 
     _textController.addListener(() {
       setState(() {
-        final int currentIndex =
-            (_textController.value * textToAnimate.length).floor();
+        final int currentIndex = (_textController.value * textToAnimate.length).floor();
         _displayedText = textToAnimate.substring(0, currentIndex);
       });
     });
@@ -70,7 +68,7 @@ class _IntroductionSectionState extends State<IntroductionSection> with TickerPr
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "LEVERAGE AI POWER",
+                      "SIMPLIFY OPERATIONS",
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 50,
@@ -78,7 +76,7 @@ class _IntroductionSectionState extends State<IntroductionSection> with TickerPr
                       ),
                     ),
                     Text(
-                      "FOR YOUR TEAM",
+                      "LEVERAGE AI",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 40,
@@ -91,7 +89,9 @@ class _IntroductionSectionState extends State<IntroductionSection> with TickerPr
             ),
           ),
         ),
-        SizedBox(width: 10,),
+        SizedBox(
+          width: 30,
+        ),
         Expanded(
           child: Align(
             alignment: Alignment.topLeft,

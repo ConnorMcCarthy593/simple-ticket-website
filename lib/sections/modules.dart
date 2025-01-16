@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/carousel.dart';
 import '../components/global_card.dart';
-import 'features_section.dart'; // Import the AutoScrollHorizontalList component
+import 'features.dart'; // Import the AutoScrollHorizontalList component
 
 class ModulesSection extends StatelessWidget {
   const ModulesSection({super.key});
@@ -61,10 +61,23 @@ class ModulesSection extends StatelessWidget {
           {'icon': Icons.receipt, 'description': 'Track expenses'},
           {'icon': Icons.calculate, 'description': 'Simplify accounting'},
           {'icon': Icons.checklist, 'description': 'Ensure compliance'},
+          {'icon': Icons.document_scanner, 'description': 'Tax ready'},
+        ],
+      ),
+      DetailedCard(
+        title: 'Task Management',
+        description: 'Efficiently manage, track, and automate tasks across your organization. The Task Management module in ServiceNow helps streamline workflows, improve collaboration, and ensure timely resolution of tasks.',
+        animationPath: 'https://lottie.host/9e5ba739-65f8-4cc4-96a8-25dbeb79d0a6/tP4BkPdq3P.json',
+        details: [
+          {'icon': Icons.check_box, 'description': 'Track and manage tasks'},
+          {'icon': Icons.work, 'description': 'Automate workflows'},
+          {'icon': Icons.people, 'description': 'Collaborate across teams'},
+          {'icon': Icons.timer, 'description': 'Ensure timely task resolution'},
+          {'icon': Icons.priority_high, 'description': 'Set and track priorities'},
         ],
       ),
     ];
 
-    return Carousel(items: cards); // Use the AutoScrollHorizontalList component
+    return Carousel(items: cards); 
   }
 }

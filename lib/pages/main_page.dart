@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:simple_ticket/components/section_title.dart';
 import '../components/custom_app_bar.dart';
 import '../components/global_card.dart';
-import '../sections/features_section.dart';
+import '../sections/contact_us.dart';
+import '../sections/features.dart';
 import '../sections/introduction.dart';
 import '../sections/modules.dart';
-
-
-
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
@@ -23,6 +21,7 @@ class _MainScreenState extends State<MainScreen> {
   final GlobalKey _introductionKey = GlobalKey();
   final GlobalKey _modulesKey = GlobalKey();
   final GlobalKey _featuresKey = GlobalKey();
+  final GlobalKey _contactUsKey = GlobalKey();
 
   bool showImage = false;
 
@@ -52,13 +51,16 @@ class _MainScreenState extends State<MainScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(height:50),
               IntroductionSection(key: _introductionKey),
-              SizedBox(height: 10),
+              SizedBox(height:100),
               SectionTitle(text: "Modules"),
               ModulesSection(key: _modulesKey),
-              SizedBox(height: 10),
+              SizedBox(height:100),
+              SectionTitle(text: "Features"),
               FeaturesSection(key: _featuresKey),
-              SizedBox(height: 10),
+              SizedBox(height:100),
+              ContactSection(key: _contactUsKey)
             ],
           ),
         ),

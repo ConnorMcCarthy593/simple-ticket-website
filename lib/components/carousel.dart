@@ -18,7 +18,6 @@ class _CarouselState extends State<Carousel> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    // print('initState called');
     
     _animationController = AnimationController(
       vsync: this,
@@ -37,34 +36,25 @@ class _CarouselState extends State<Carousel> with SingleTickerProviderStateMixin
   }
 
   void _startAutoScroll() async {
-    // print('_startAutoScroll called, isHovering: $_isHovering');
-    
     if (!_isHovering) {
       await Future.delayed(Duration(seconds: 1));
       
       if (!mounted || _isHovering) {
-        // print('Cannot start scroll - widget not mounted or hovering');
         return;
       }
 
-      // print('Starting scroll animation');
       _animationController.forward();
-    } else {
-      // print('Not starting scroll - hover detected');
     }
   }
 
   void _handleHoverChange(bool isHovering) {
-    // print('Hover state changed to: $isHovering');
     setState(() {
       _isHovering = isHovering;
     });
     
     if (isHovering) {
-      // print('Pausing scroll');
       _animationController.stop();
     } else {
-      // print('Resuming scroll');
       if (_animationController.value < 1) {
         _animationController.forward();
       }
@@ -73,33 +63,40 @@ class _CarouselState extends State<Carousel> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    // Group the items into rows, each containing at most 3 items
+    List<List<Widget>> groupedItems = [];
+    for (int i = 0; i < widget.items.length; i += 3) {
+      groupedItems.add(widget.items.sublist(i, i + 3 > widget.items.length ? widget.items.length : i + 3));
+    }
+
     return SingleChildScrollView(
       controller: _scrollController,
       scrollDirection: Axis.horizontal,
-      child: Row(
-        children: widget.items
-            .map((item) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: MouseRegion(
-                    onEnter: (_) {
-                      // print('Mouse entered');
-                      _handleHoverChange(true);
-                    },
-                    onExit: (_) {
-                      // print('Mouse exited');
-                      _handleHoverChange(false);
-                    },
-                    child: item,
-                  ),
-                ))
-            .toList(),
+      child: Column(
+        children: groupedItems.map((rowItems) {
+          return Row(
+            children: rowItems
+                .map((item) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: MouseRegion(
+                        onEnter: (_) {
+                          _handleHoverChange(true);
+                        },
+                        onExit: (_) {
+                          _handleHoverChange(false);
+                        },
+                        child: item,
+                      ),
+                    ))
+                .toList(),
+          );
+        }).toList(),
       ),
     );
   }
 
   @override
   void dispose() {
-    // print('Disposing widget');
     _scrollController.dispose();
     _animationController.dispose();
     super.dispose();
