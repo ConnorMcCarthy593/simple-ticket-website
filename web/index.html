@@ -34,5 +34,12 @@
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+  <script>
+    document.addEventListener('wheel', function(event) {
+      if (event.deltaX !== 0) {
+        event.preventDefault();
+      }
+    }, { passive: false });
+  </script>
 </body>
 </html>

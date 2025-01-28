@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:simple_ticket/components/section_title.dart';
+import '../components/carousel.dart';
 import '../components/custom_app_bar.dart';
 import '../components/global_card.dart';
+import '../data.dart';
 import '../sections/contact_us.dart';
-import '../sections/features.dart';
 import '../sections/introduction.dart';
-import '../sections/modules.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
@@ -36,13 +36,10 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
-    // Get the theme color from the context
-    // Color themeColor = Theme.of(context).primaryColor;
-
     return Scaffold(
-      // backgroundColor: themeColor, // Use theme's primary color
       appBar: CustomAppBar(showImage: showImage),
       body: SingleChildScrollView(
         controller: _controller,
@@ -51,18 +48,21 @@ class _MainScreenState extends State<MainScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height:50),
+              SizedBox(height: 50),
               IntroductionSection(key: _introductionKey),
-              SizedBox(height:100),
+              SizedBox(height: 100),
               SectionTitle(text: "Modules"),
-              ModulesSection(key: _modulesKey),
-              SizedBox(height:100),
+              Carousel(items: modules1),
+              Carousel(items: modules2),
+              SizedBox(height: 100),
               SectionTitle(text: "Features"),
-              FeaturesSection(key: _featuresKey),
-              SizedBox(height:100),
+              Carousel(items: features1),
+              Carousel(items: features2),
+              SizedBox(height: 100),
               ContactSection(key: _contactUsKey),
-              SizedBox(height: 50,),
-              
+              SizedBox(
+                height: 50,
+              ),
             ],
           ),
         ),
