@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:excel/excel.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_dotenv/flutter_dotenv.dart'; 
 class DocsUtil {
   List<Map<String, dynamic>>? documentationData;
 
   Future<void> load_data_per_context() async {
     var url = Uri.parse('https://api.github.com/repos/casas1010/simple_ticket_docs/contents/documentation.xlsx');
 
-    var token = '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';
+    var token = dotenv.env['GITHUB_TOKEN'];
 
     var response = await http.get(
       url,
