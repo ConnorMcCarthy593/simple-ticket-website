@@ -46,3 +46,6 @@ app.*.map.json
 # Exclude environment files
 .env
 .env.*
+# Ignore env files
+.env
+ # Ensure .env is ignored
