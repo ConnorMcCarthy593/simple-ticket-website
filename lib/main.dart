@@ -14,7 +14,7 @@ const double MOBILE_SCREEN_WIDTH = 350.0;
 Future<void> main() async {
   // Ensure that dotenv is loaded before running the app
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: ".env");
 
   runApp(MyApp());
 }
