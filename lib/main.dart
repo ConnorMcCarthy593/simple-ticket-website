@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:simple_ticket/components/navigator.dart';
+
+import 'pages/doc_page.dart';
 import 'pages/main_page.dart';
 
 // Define a constant for your theme color
@@ -18,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       theme: ThemeData(
         primaryColor: customBlue,  // Primary color
         colorScheme: ColorScheme.light(
@@ -32,7 +36,8 @@ class MyApp extends StatelessWidget {
         ),
         // You can define other theme properties here as needed
       ),
-      home: MainScreen(),
+      home: NavigatorScreen(),
     );
   }
 }
+

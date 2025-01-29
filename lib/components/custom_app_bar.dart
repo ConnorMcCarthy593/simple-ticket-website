@@ -1,13 +1,9 @@
-
-
-
 import 'package:flutter/material.dart';
-
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showImage;
-
-  CustomAppBar({required this.showImage});
+  final Function(String) onNavigation;
+  CustomAppBar({required this.showImage, required this.onNavigation});
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -15,11 +11,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // backgroundColor: Color(0xFF35495F),
-            backgroundColor: Theme.of(context).primaryColor,
-
+      backgroundColor: Theme.of(context).primaryColor,
+      leading: IconButton(
+        icon: Icon(Icons.menu),
+        onPressed: () {
+          // Open the drawer when the menu button is pressed
+          Scaffold.of(context).openDrawer();
+        },
+      ),
       title: AnimatedSwitcher(
-        duration: Duration(milliseconds: 500), // Set animation duration
+        duration: Duration(milliseconds: 500),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return FadeTransition(
             opacity: animation,
@@ -29,16 +30,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: showImage
             ? Image.network(
                 'https://iili.io/26emATx.png',
-                height: 80, // Adjust height as needed
-                key: ValueKey<int>(1), // Ensure the widget is treated as a new widget
+                height: 80,
+                key: ValueKey<int>(1),
               )
             : Text(
                 'Welcome to',
                 style: TextStyle(
-                  color: Colors.white, // Set text color to white
-                  fontSize: 20, // Adjust font size as needed
+                  color: Colors.white,
+                  fontSize: 20,
                 ),
-                key: ValueKey<int>(0), // Ensure the widget is treated as a new widget
+                key: ValueKey<int>(0),
               ),
       ),
       actions: [],
