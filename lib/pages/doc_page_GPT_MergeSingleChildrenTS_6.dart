@@ -182,6 +182,8 @@ class _SidebarState extends State<Sidebar> {
      if (widget == null) {
       return SizedBox.shrink(); // Return an empty widget if null
     }
+
+    print("Unwrapping widget of type: ${widget.runtimeType}");
     
     // Base case: If it's a ListTile or ExpansionTile, return it as is
     if (widget is ListTile || widget is ExpansionTile) {
@@ -190,18 +192,22 @@ class _SidebarState extends State<Sidebar> {
 
     // If it's a Column and has exactly one child, go deeper
     else if (widget is Column){
+      print("Column Lenth: ${widget.children.length}");
       if (widget.children.length == 1) {
+        print("Unwrapping Column..."); // Debugging
         return _unwrapSingleChild(widget.children.first);
       }
     } 
     
     // If it's a ValueListenableBuilder, go deeper
     else if (widget is ValueListenableBuilder) {
+      print("Unwrapping ValueListenableBuilder...");
       return _unwrapSingleChild((widget as dynamic).child); // Access child dynamically
     }
 
     // If it's a AnimatedSwitcher, go deeper
     else if (widget is AnimatedSwitcher) {
+      print("Unwrapping AnimatedSwitcher...");
       return _unwrapSingleChild(widget.child ?? SizedBox.shrink());
     }
 
@@ -213,33 +219,37 @@ class _SidebarState extends State<Sidebar> {
   ValueNotifier<Set<String>> _expandedKeysNotifier = ValueNotifier({});
 
   Widget _buildExpansionTile(String title, int currentLevel, List<Widget> children, String uniqueKey) {
-    // print("Building ExpansionTile for $title at level $currentLevel");
     Widget unwrappedChild = children.isNotEmpty? _unwrapSingleChild(children.first) : SizedBox.shrink();
+
+    print("Processing: $title at level $currentLevel, children count: ${children.length}");
 
     // Check if we have only one child and its type
     if (children.length == 1) {
       var singleChild = _unwrapSingleChild(children.first);
       // Unwrap Column if it only contains one child
       if (singleChild is Column && singleChild.children.length == 1) {
+        print("Unwrapping Column for $title");
         singleChild = singleChild.children.first;
       }
+
+      print("Single child type for $title: ${singleChild.runtimeType}");
     }
 
     // Flatten path if there's only one child (recursively)
     while (children.length == 1 && unwrappedChild is ExpansionTile) {
       var singleChild = unwrappedChild as ExpansionTile;
-      title = "$title: ${(singleChild.title as Text).data ?? ""}";
+      title = "$title → ${(singleChild.title as Text).data ?? ""}";
       children = singleChild.children;
-      //print("Flattening: $title, new children count: ${children.length}");
+      print("Flattening: $title, new children count: ${children.length}");
     }
 
     // If the only remaining child is a ListTile, merge it
     if (children.length == 1 && unwrappedChild is ListTile) { // Skip ExpansionTile if only one child exists
       var singleChild = unwrappedChild as ListTile;
-      //print("Merging ListTile: $title → ${(singleChild.title as Text).data ?? ""}");
+      print("Merging ListTile: $title → ${(singleChild.title as Text).data ?? ""}");
         return ListTile(
           title: Text(
-            "$title: ${(singleChild.title as Text).data ?? ""}",
+            "$title → ${(singleChild.title as Text).data ?? ""}",
             style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: (16 - currentLevel).clamp(12, 16).toDouble(),
@@ -305,7 +315,6 @@ class _SidebarState extends State<Sidebar> {
       List<Map<String, dynamic>> items,
       int currentLevel,
       List<String> parentKeys) {
-  
     if (currentLevel >= hierarchyLevels.length) return Container();
 
     var grouped = <String, List<Map<String, dynamic>>>{};

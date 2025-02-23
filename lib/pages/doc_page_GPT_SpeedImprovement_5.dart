@@ -136,13 +136,6 @@ class _SidebarState extends State<Sidebar> {
         .any((level) => _getNonEmptyValue(item, level) != null);
   }
 
-  String _extractTitle(Widget widget) {
-    if (widget is ListTile && widget.title is Text) {
-      return (widget.title as Text).data ?? "";
-    }
-    return "";
-  }
-
   Widget _buildListTile(
       BuildContext context, Map<String, dynamic> item, String title) {
     final bool isUnnamed = !_hasAnyValue(item);
@@ -178,95 +171,12 @@ class _SidebarState extends State<Sidebar> {
     );
   }
 
-  Widget _unwrapSingleChild(Widget widget) {
-     if (widget == null) {
-      return SizedBox.shrink(); // Return an empty widget if null
-    }
-    
-    // Base case: If it's a ListTile or ExpansionTile, return it as is
-    if (widget is ListTile || widget is ExpansionTile) {
-      return widget;
-    }  
-
-    // If it's a Column and has exactly one child, go deeper
-    else if (widget is Column){
-      if (widget.children.length == 1) {
-        return _unwrapSingleChild(widget.children.first);
-      }
-    } 
-    
-    // If it's a ValueListenableBuilder, go deeper
-    else if (widget is ValueListenableBuilder) {
-      return _unwrapSingleChild((widget as dynamic).child); // Access child dynamically
-    }
-
-    // If it's a AnimatedSwitcher, go deeper
-    else if (widget is AnimatedSwitcher) {
-      return _unwrapSingleChild(widget.child ?? SizedBox.shrink());
-    }
-
-    // If it's anything else, return as is
-    return widget;
-  }
-
-
   ValueNotifier<Set<String>> _expandedKeysNotifier = ValueNotifier({});
 
   Widget _buildExpansionTile(String title, int currentLevel, List<Widget> children, String uniqueKey) {
-    // print("Building ExpansionTile for $title at level $currentLevel");
-    Widget unwrappedChild = children.isNotEmpty? _unwrapSingleChild(children.first) : SizedBox.shrink();
-
-    // Check if we have only one child and its type
-    if (children.length == 1) {
-      var singleChild = _unwrapSingleChild(children.first);
-      // Unwrap Column if it only contains one child
-      if (singleChild is Column && singleChild.children.length == 1) {
-        singleChild = singleChild.children.first;
-      }
-    }
-
-    // Flatten path if there's only one child (recursively)
-    while (children.length == 1 && unwrappedChild is ExpansionTile) {
-      var singleChild = unwrappedChild as ExpansionTile;
-      title = "$title: ${(singleChild.title as Text).data ?? ""}";
-      children = singleChild.children;
-      //print("Flattening: $title, new children count: ${children.length}");
-    }
-
-    // If the only remaining child is a ListTile, merge it
-    if (children.length == 1 && unwrappedChild is ListTile) { // Skip ExpansionTile if only one child exists
-      var singleChild = unwrappedChild as ListTile;
-      //print("Merging ListTile: $title → ${(singleChild.title as Text).data ?? ""}");
-        return ListTile(
-          title: Text(
-            "$title: ${(singleChild.title as Text).data ?? ""}",
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: (16 - currentLevel).clamp(12, 16).toDouble(),
-            ),
-          ),
-          contentPadding: EdgeInsets.only(left: 16.0 + (currentLevel * 8.0), right: 16.0),
-          onTap: singleChild.onTap, // Preserve navigation behavior
-        );
-    }
-
     return ValueListenableBuilder<Set<String>>(
       valueListenable: _expandedKeysNotifier,
-      child: SizedBox.shrink(),
       builder: (context, expandedKeys, child) {
-        // Decide whether to simplify based on the state
-        bool shouldSimplify = currentLevel > 1 && children.length == 1 && children.first is ListTile;
-
-        // If we should simplify, skip ExpansionTile and show a single ListTile
-        if (shouldSimplify && children.first is ListTile) {
-          return ListTile(
-            title: Text("$title → ${(children.first as ListTile).title}"),
-            onTap: () {
-              // Handle navigation or other actions
-            },
-          );
-        }
-
         return ExpansionTile(
           key: ValueKey(uniqueKey),
           initiallyExpanded: expandedKeys.contains(uniqueKey),
@@ -289,10 +199,10 @@ class _SidebarState extends State<Sidebar> {
           ),
           children: [
             AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
+              duration: Duration(milliseconds: 200),
               child: expandedKeys.contains(uniqueKey)
                   ? Column(children: children) 
-                  : const SizedBox.shrink(),
+                  : SizedBox.shrink(),
             ),
           ],
         );
@@ -305,7 +215,6 @@ class _SidebarState extends State<Sidebar> {
       List<Map<String, dynamic>> items,
       int currentLevel,
       List<String> parentKeys) {
-  
     if (currentLevel >= hierarchyLevels.length) return Container();
 
     var grouped = <String, List<Map<String, dynamic>>>{};

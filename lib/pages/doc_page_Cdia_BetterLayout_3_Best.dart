@@ -12,8 +12,8 @@ class DocsPage extends StatefulWidget {
 
 class _DocsPageState extends State<DocsPage> {
   late DocsUtil _docs_util;
-  List<Map<String, dynamic>>? _documentationData = [];
-  bool _isLoading = true;
+  late List<Map<String, dynamic>>? _documentationData = [];
+  late bool _is_loading = true;
   final ItemScrollController _itemScrollController = ItemScrollController();
   final ItemPositionsListener _itemPositionsListener =
       ItemPositionsListener.create();
@@ -27,7 +27,7 @@ class _DocsPageState extends State<DocsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
+    if (_is_loading) {
       return Center(
         child: CircularProgressIndicator(), // Display a loading spinner
       );
@@ -36,21 +36,17 @@ class _DocsPageState extends State<DocsPage> {
     return Scaffold(
       body: Row(
         children: [
-          Flexible(
+          Expanded(
             flex: 1,
-            child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxWidth: 300), // Prevent excessive expansion
-              child: Sidebar(
-                documentationData: _documentationData!,
-                onItemSelected: (index) {
-                  _itemScrollController.scrollTo(
-                    index: index,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
+            child: Sidebar(
+              documentationData: _documentationData!,
+              onItemSelected: (index) {
+                _itemScrollController.scrollTo(
+                  index: index,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              },
             ),
           ),
           Flexible(
@@ -69,22 +65,23 @@ class _DocsPageState extends State<DocsPage> {
 
   Future<void> _init() async {
     await _docs_util.load_data_per_context();
-    if (mounted) {
-      setState(() {
-        _documentationData = _docs_util.documentationData;
-        _isLoading = false;
-      });
-    }
+    setState(() {
+      _documentationData = _docs_util.documentationData;
+      _is_loading = false;
+    });
   }
 }
+
 
 class Sidebar extends StatefulWidget {
   final List<Map<String, dynamic>> documentationData;
   final Function(int) onItemSelected;
 
-  const Sidebar(
-      {Key? key, required this.documentationData, required this.onItemSelected})
-      : super(key: key);
+  const Sidebar({
+    Key? key, 
+    required this.documentationData, 
+    required this.onItemSelected
+  }) : super(key: key);
 
   @override
   State<Sidebar> createState() => _SidebarState();
@@ -109,8 +106,7 @@ class _SidebarState extends State<Sidebar> {
     return (value != null && value.isNotEmpty) ? value : null;
   }
 
-  String _getEffectiveKey(
-      Map<String, dynamic> item, int currentLevel, List<String> parentKeys) {
+  String _getEffectiveKey(Map<String, dynamic> item, int currentLevel, List<String> parentKeys) {
     for (int i = currentLevel; i < hierarchyLevels.length; i++) {
       final value = _getNonEmptyValue(item, hierarchyLevels[i]);
       if (value != null && !parentKeys.contains(value)) {
@@ -120,8 +116,7 @@ class _SidebarState extends State<Sidebar> {
     return '';
   }
 
-  String _getNextValidKey(
-      Map<String, dynamic> item, int startLevel, List<String> parentKeys) {
+  String _getNextValidKey(Map<String, dynamic> item, int startLevel, List<String> parentKeys) {
     for (int i = startLevel + 1; i < hierarchyLevels.length; i++) {
       final value = _getNonEmptyValue(item, hierarchyLevels[i]);
       if (value != null && value.length >= 2 && !parentKeys.contains(value)) {
@@ -132,180 +127,62 @@ class _SidebarState extends State<Sidebar> {
   }
 
   bool _hasAnyValue(Map<String, dynamic> item) {
-    return hierarchyLevels
-        .any((level) => _getNonEmptyValue(item, level) != null);
+    return hierarchyLevels.any((level) => 
+      _getNonEmptyValue(item, level) != null
+    );
   }
 
-  String _extractTitle(Widget widget) {
-    if (widget is ListTile && widget.title is Text) {
-      return (widget.title as Text).data ?? "";
-    }
-    return "";
-  }
-
-  Widget _buildListTile(
-      BuildContext context, Map<String, dynamic> item, String title) {
+  Widget _buildListTile(BuildContext context, Map<String, dynamic> item, String title) {
     final bool isUnnamed = !_hasAnyValue(item);
-
+    
     return ListTile(
       dense: true,
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       title: Text(
         isUnnamed ? "Unnamed" : title,
         style: TextStyle(
           fontSize: 13,
           fontStyle: isUnnamed ? FontStyle.italic : FontStyle.normal,
-          color: Theme.of(context)
-              .colorScheme
-              .onSurface
-              .withOpacity(isUnnamed ? 0.6 : 0.87),
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(isUnnamed ? 0.6 : 0.87),
         ),
       ),
-      subtitle: item['Description'] != null
-          ? Text(
-              item['Description'].toString(),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 11,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-              ),
-            )
-          : null,
-      onTap: () =>
-          widget.onItemSelected(widget.documentationData.indexOf(item)),
+      subtitle: item['Description'] != null ? Text(
+        item['Description'].toString(),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontSize: 11,
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+        ),
+      ) : null,
+      onTap: () => widget.onItemSelected(widget.documentationData.indexOf(item)),
     );
   }
-
-  Widget _unwrapSingleChild(Widget widget) {
-     if (widget == null) {
-      return SizedBox.shrink(); // Return an empty widget if null
-    }
-    
-    // Base case: If it's a ListTile or ExpansionTile, return it as is
-    if (widget is ListTile || widget is ExpansionTile) {
-      return widget;
-    }  
-
-    // If it's a Column and has exactly one child, go deeper
-    else if (widget is Column){
-      if (widget.children.length == 1) {
-        return _unwrapSingleChild(widget.children.first);
-      }
-    } 
-    
-    // If it's a ValueListenableBuilder, go deeper
-    else if (widget is ValueListenableBuilder) {
-      return _unwrapSingleChild((widget as dynamic).child); // Access child dynamically
-    }
-
-    // If it's a AnimatedSwitcher, go deeper
-    else if (widget is AnimatedSwitcher) {
-      return _unwrapSingleChild(widget.child ?? SizedBox.shrink());
-    }
-
-    // If it's anything else, return as is
-    return widget;
-  }
-
-
-  ValueNotifier<Set<String>> _expandedKeysNotifier = ValueNotifier({});
 
   Widget _buildExpansionTile(String title, int currentLevel, List<Widget> children, String uniqueKey) {
-    // print("Building ExpansionTile for $title at level $currentLevel");
-    Widget unwrappedChild = children.isNotEmpty? _unwrapSingleChild(children.first) : SizedBox.shrink();
-
-    // Check if we have only one child and its type
-    if (children.length == 1) {
-      var singleChild = _unwrapSingleChild(children.first);
-      // Unwrap Column if it only contains one child
-      if (singleChild is Column && singleChild.children.length == 1) {
-        singleChild = singleChild.children.first;
-      }
-    }
-
-    // Flatten path if there's only one child (recursively)
-    while (children.length == 1 && unwrappedChild is ExpansionTile) {
-      var singleChild = unwrappedChild as ExpansionTile;
-      title = "$title: ${(singleChild.title as Text).data ?? ""}";
-      children = singleChild.children;
-      //print("Flattening: $title, new children count: ${children.length}");
-    }
-
-    // If the only remaining child is a ListTile, merge it
-    if (children.length == 1 && unwrappedChild is ListTile) { // Skip ExpansionTile if only one child exists
-      var singleChild = unwrappedChild as ListTile;
-      //print("Merging ListTile: $title → ${(singleChild.title as Text).data ?? ""}");
-        return ListTile(
-          title: Text(
-            "$title: ${(singleChild.title as Text).data ?? ""}",
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: (16 - currentLevel).clamp(12, 16).toDouble(),
-            ),
-          ),
-          contentPadding: EdgeInsets.only(left: 16.0 + (currentLevel * 8.0), right: 16.0),
-          onTap: singleChild.onTap, // Preserve navigation behavior
-        );
-    }
-
-    return ValueListenableBuilder<Set<String>>(
-      valueListenable: _expandedKeysNotifier,
-      child: SizedBox.shrink(),
-      builder: (context, expandedKeys, child) {
-        // Decide whether to simplify based on the state
-        bool shouldSimplify = currentLevel > 1 && children.length == 1 && children.first is ListTile;
-
-        // If we should simplify, skip ExpansionTile and show a single ListTile
-        if (shouldSimplify && children.first is ListTile) {
-          return ListTile(
-            title: Text("$title → ${(children.first as ListTile).title}"),
-            onTap: () {
-              // Handle navigation or other actions
-            },
-          );
-        }
-
-        return ExpansionTile(
-          key: ValueKey(uniqueKey),
-          initiallyExpanded: expandedKeys.contains(uniqueKey),
-          onExpansionChanged: (isExpanded) {
-            _expandedKeysNotifier.value = {
-              ...expandedKeys,
-              if (isExpanded) uniqueKey else ...expandedKeys.where((key) => key != uniqueKey),
-            };
-          },
-          maintainState: true,
-          title: Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: (16 - currentLevel).clamp(12, 16).toDouble(),
-            ),
-          ),
-          tilePadding: EdgeInsets.only(
-                left: 16.0 + (currentLevel * 8.0), right: 16.0
-          ),
-          children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: expandedKeys.contains(uniqueKey)
-                  ? Column(children: children) 
-                  : const SizedBox.shrink(),
-            ),
-          ],
-        );
-      }
+    return ExpansionTile(
+      key: ValueKey(uniqueKey),
+      initiallyExpanded: false,
+      onExpansionChanged: (isExpanded) {
+        setState(() {
+          _expandedKey = isExpanded ? uniqueKey : null;
+        });
+      },
+      maintainState: true,
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: (16 - currentLevel).clamp(12, 16).toDouble(),
+        ),
+      ),
+      children: children,
+      tilePadding: EdgeInsets.only(left: 16.0 + (currentLevel * 8.0), right: 16.0),
     );
   }
 
-  Widget _buildHierarchyLevel(
-      BuildContext context,
-      List<Map<String, dynamic>> items,
-      int currentLevel,
-      List<String> parentKeys) {
-  
+  Widget _buildHierarchyLevel(BuildContext context, List<Map<String, dynamic>> items, 
+      int currentLevel, List<String> parentKeys) {
     if (currentLevel >= hierarchyLevels.length) return Container();
 
     var grouped = <String, List<Map<String, dynamic>>>{};
@@ -320,7 +197,7 @@ class _SidebarState extends State<Sidebar> {
       }
 
       String groupKey = _getEffectiveKey(item, currentLevel, parentKeys);
-
+      
       if (groupKey.isEmpty || groupKey.length < 2) {
         itemsToRegroup.add(item);
       } else {
@@ -331,7 +208,7 @@ class _SidebarState extends State<Sidebar> {
     // Handle regrouping
     if (itemsToRegroup.isNotEmpty) {
       var subGroups = <String, List<Map<String, dynamic>>>{};
-
+      
       for (var item in itemsToRegroup) {
         String nextKey = _getNextValidKey(item, currentLevel, parentKeys);
         if (nextKey.isNotEmpty) {
@@ -357,27 +234,20 @@ class _SidebarState extends State<Sidebar> {
       var newParentKeys = List<String>.from(parentKeys)..add(key);
       bool hasSubItems = groupItems.any((item) {
         return hierarchyLevels.skip(currentLevel + 1).any((level) =>
-            _getEffectiveKey(
-                    item, hierarchyLevels.indexOf(level), newParentKeys)
-                .isNotEmpty);
+            _getEffectiveKey(item, hierarchyLevels.indexOf(level), newParentKeys).isNotEmpty);
       });
 
       String uniqueKey = '${currentLevel}_${key}_${newParentKeys.join("_")}';
 
       if (!hasSubItems || currentLevel == hierarchyLevels.length - 1) {
         children.add(Column(
-          children: groupItems
-              .map((item) => _buildListTile(context, item, key))
-              .toList(),
+          children: groupItems.map((item) => _buildListTile(context, item, key)).toList(),
         ));
       } else {
         children.add(_buildExpansionTile(
           key,
           currentLevel,
-          [
-            _buildHierarchyLevel(
-                context, groupItems, currentLevel + 1, newParentKeys)
-          ],
+          [_buildHierarchyLevel(context, groupItems, currentLevel + 1, newParentKeys)],
           uniqueKey,
         ));
       }
@@ -386,9 +256,9 @@ class _SidebarState extends State<Sidebar> {
     // Add unnamed items at the end
     if (unnamedItems.isNotEmpty) {
       children.add(Column(
-        children: unnamedItems
-            .map((item) => _buildListTile(context, item, "Unnamed"))
-            .toList(),
+        children: unnamedItems.map((item) => 
+          _buildListTile(context, item, "Unnamed")
+        ).toList(),
       ));
     }
 
@@ -424,8 +294,7 @@ class _SidebarState extends State<Sidebar> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: _buildHierarchyLevel(
-                  context, widget.documentationData, 0, []),
+              child: _buildHierarchyLevel(context, widget.documentationData, 0, []),
             ),
           ),
         ],
